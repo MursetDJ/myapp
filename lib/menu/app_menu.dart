@@ -9,13 +9,13 @@ class MenuWeb extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
         backgroundColor: const Color.fromARGB(106, 33, 149, 243),
-        child: Column(children: [
-          const SizedBox(
-            height: 20,
-          ),
-          Center(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Center(
               child: Container(
-              
                 height: 120,
                 width: 120,
                 decoration: BoxDecoration(
@@ -23,17 +23,15 @@ class MenuWeb extends StatelessWidget {
                   shape: BoxShape.rectangle,
                   border: Border.all(width: 2, color: Colors.black),
                 ),
-               
-                  child: Image.asset(
-                    "logoConaeingeo.png",
-                    width: 60,
-                    height: 120,
-                    fit: BoxFit.cover,
-
-                  ),
-              
+                child: Image.asset(
+                  "assets/logoConaeingeo.png",
+                  width: 60,
+                  height: 120,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-        ],));
+          ],
+        ));
   }
 }

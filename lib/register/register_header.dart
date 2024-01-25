@@ -14,9 +14,9 @@ class _CabeceraScreenState extends State<CabeceraScreen>
   late AnimationController _controller;
   @override
   void initState() {
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
-     _controller.forward();
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
+    _controller.forward();
     super.initState();
   }
 
@@ -33,26 +33,24 @@ class _CabeceraScreenState extends State<CabeceraScreen>
         Container(
           margin: const EdgeInsets.all(20),
           child: Center(
-              child: AnimatedBuilder(
+            child: AnimatedBuilder(
                 animation: _controller,
-                builder: (context,_) {
-                  final value=_controller.value;
+                builder: (context, _) {
+                  final value = _controller.value;
                   return Opacity(
                     opacity: value,
                     child: Transform.translate(
-                      offset: Offset( 0, 80 * (1 - value)),
+                      offset: Offset(0, 80 * (1 - value)),
                       child: Image.asset(
-                        "OIP.jpeg",
+                        "assets/OIP.jpeg",
                         fit: BoxFit.fill,
                         width: espacio.maxWidth,
                         height: 200,
                       ),
                     ),
                   );
-                }
-              ),
-            ),
-          
+                }),
+          ),
         ),
         Container(
           margin: const EdgeInsets.all(20),
@@ -60,32 +58,31 @@ class _CabeceraScreenState extends State<CabeceraScreen>
           height: 200,
           alignment: Alignment.center,
           child: AnimatedBuilder(
-            animation: _controller,
-            builder: (context,_) {
-               final value=_controller.value;
-              return Opacity(
-                opacity: value,
-                child: Transform.translate(
-                  offset: Offset(0, 80*(1-value)),
-                  child: Text(
-                    "INSCRIPCIONES XIII CONAEINGEO UNC 2024 - UNC",
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontSize: espacio.maxWidth * 0.035,
-                      color: Colors.white,
-                      shadows: [
-                        const Shadow(
-                          blurRadius: 2,
-                          color: Colors.black,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
+              animation: _controller,
+              builder: (context, _) {
+                final value = _controller.value;
+                return Opacity(
+                  opacity: value,
+                  child: Transform.translate(
+                    offset: Offset(0, 80 * (1 - value)),
+                    child: Text(
+                      "INSCRIPCIONES XIII CONAEINGEO UNC 2024 - UNC",
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontSize: espacio.maxWidth * 0.035,
+                        color: Colors.white,
+                        shadows: const [
+                          Shadow(
+                            blurRadius: 2,
+                            color: Colors.black,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            }
-          ),
+                );
+              }),
         )
       ]);
     });

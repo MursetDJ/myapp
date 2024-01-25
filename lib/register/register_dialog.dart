@@ -3,17 +3,16 @@ import 'package:myapp/register/register_screen.dart';
 
 class RegisterDialog extends StatefulWidget {
   const RegisterDialog({super.key, required this.context});
-   final BuildContext context;
+  final BuildContext context;
   @override
   State<RegisterDialog> createState() => _RegisterDialogState();
 }
 
 class _RegisterDialogState extends State<RegisterDialog> {
   bool? _button;
-  
+
   @override
   Widget build(BuildContext context) {
-    
     return AlertDialog(
         shadowColor: Colors.blue,
         content: StatefulBuilder(builder: (context, StateSetter setState) {
@@ -63,7 +62,7 @@ class _RegisterDialogState extends State<RegisterDialog> {
                             ? null
                             : () {
                                 Navigator.of(context).pop();
-                               
+
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => const RegisterScreen(),
                                 ));

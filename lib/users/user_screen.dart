@@ -11,7 +11,6 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
-  
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -69,7 +68,7 @@ class _UserScreenState extends State<UserScreen> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return  RegisterDialog(context: context);
+                    return RegisterDialog(context: context);
                   },
                 );
               },
