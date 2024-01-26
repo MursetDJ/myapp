@@ -32,6 +32,9 @@ class _CabeceraScreenState extends State<CabeceraScreen>
       return Stack(children: [
         Container(
           margin: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.all(Radius.circular(30))),
           child: Center(
             child: AnimatedBuilder(
                 animation: _controller,
@@ -42,10 +45,10 @@ class _CabeceraScreenState extends State<CabeceraScreen>
                     child: Transform.translate(
                       offset: Offset(0, 80 * (1 - value)),
                       child: Image.asset(
-                        "assets/OIP.jpeg",
-                        fit: BoxFit.fill,
+                        "assets/logoConaeingeo.png",
+                        fit: BoxFit.contain,
                         width: espacio.maxWidth,
-                        height: 200,
+                        height: 350,
                       ),
                     ),
                   );
