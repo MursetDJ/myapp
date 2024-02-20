@@ -1,8 +1,22 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/menu/app_menu.dart';
-import 'package:myapp/users/user_screen.dart';
+import 'package:myapp/data/register_firebase.dart';
+import 'package:myapp/repository/auth/auth.dart';
+import 'package:myapp/repository/register/register_repository.dart';
+import 'package:myapp/ui/buttonCard/button_style.dart';
+import 'package:myapp/ui/menu/app_menu.dart';
+import 'package:myapp/ui/menu/menu_screen.dart';
+import 'package:myapp/ui/register/register_screen.dart';
+import 'package:myapp/ui/users/user_screen.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+import 'firebase_options.dart';
+import 'ui/registrados/registrados.dart';
+
+Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -11,14 +25,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CONAINGEO',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'CONAINGEO'),
-    );
+    return MultiProvider(
+        providers: [
+          Provider<RegisterRepository>(
+            create: (_) => RegisterFirebase(),
+          ),
+        ],
+        child: MaterialApp(
+          initialRoute: Auth().inSession() ? '/menu' : '/login',
+          routes: {
+            '/register': (context) => RegisterScreen.init(),
+            '/login': (context) => const MyHomePage(title: "CONAEINGEO"),
+            '/menu': (context) => const MenuScreen(),
+            '/listregister': (context) => RegisterDetailsScreenState.init()
+          },
+        ));
   }
 }
 
@@ -40,14 +61,20 @@ class _MyHomePageState extends State<MyHomePage> {
           drawer: constraints.maxWidth < 700 ? const MenuWeb() : null,
           appBar: AppBar(
             actions: constraints.maxWidth >= 700
-                ? [                 
-                       TextButton.icon(onPressed: (){}, icon: const Icon(Icons.person), label: const Text("REGISTRARSE"))
-                         ,TextButton.icon(onPressed: (){}, icon: const Icon(Icons.phone), label: const Text("CONTACTOS"))
-                        ,TextButton.icon(onPressed: (){}, icon: const Icon(Icons.wallet), label: const Text("PAGOS"))
-                     ]
-                  
+                ? [
+                    TextButton.icon(
+                        style: designButton(),
+                        onPressed: () {},
+                        icon: const Icon(Icons.phone),
+                        label: const Text("CONTACTOS")),
+                    TextButton.icon(
+                        style: designButton(),
+                        onPressed: () {},
+                        icon: const Icon(Icons.wallet),
+                        label: const Text("PAGOS"))
+                  ]
                 : null,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            backgroundColor: Colors.blue,
             title: Text(
               widget.title,
               style: const TextStyle(
@@ -65,23 +92,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-
-/*Center(
-              child: Container(
-                height: 120,
-                width: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 2, color: Colors.black),
-                ),
-                child: ClipOval(
-                  child: Image.network(
-                    "https://mextudia.com/wp-content/uploads/2019/06/pexels-photo-1533466-e1561320476229.jpg",
-                    width: 60,
-                    height: 120,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),*/
