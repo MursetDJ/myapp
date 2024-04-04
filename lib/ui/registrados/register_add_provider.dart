@@ -7,7 +7,7 @@ class RegisterAddProvider extends ChangeNotifier {
   final RegisterRepository regRepo;
 
   Future<bool> add(Register register) async {
-    await regRepo.addRegister(register);
-    return true;
+    final repo = await regRepo.addRegister(register);
+    return repo;
   }
 }

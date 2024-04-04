@@ -13,7 +13,7 @@ class _ListRegisterScreenState extends State<ListRegisterScreen> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, espacio) {
       return Scaffold(
-        appBar: menuAppBar(espacio),
+        appBar: menuAppBar(espacio, context),
       );
     });
   }

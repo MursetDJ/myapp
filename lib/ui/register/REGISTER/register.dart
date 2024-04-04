@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final register = registerFromJson(jsonString);
-
 import 'dart:convert';
 
 List<Register> registerFromJson(String str) =>
@@ -17,33 +13,32 @@ class Register {
     required this.university,
     required this.dni,
     required this.typeStudent,
-    required this.hotmail,
-    required this.cicle,
-    required this.imgPerfil,
-    required this.pagoCompr,
+    required this.email,
+    required this.ciclo,
+    required this.imgperfil,
+    required this.pagoComprob,
     required this.constance,
     required this.modality,
-    required this.inscripction,
-    required this.detailInscription,
+    required this.inscription,
+    this.detailInscription,
     required this.opinion,
     this.id,
   });
   final String name;
   final String lastname;
   final String university;
-
   final String dni;
   final String typeStudent;
-  final String hotmail;
-  final String cicle;
-  final String imgPerfil;
-  final String pagoCompr;
+  final String email;
+  final String ciclo;
+  final String imgperfil;
+  final String pagoComprob;
   final String constance;
   final String modality;
-  final String inscripction;
-  final String detailInscription;
+  final String inscription;
+  final List<String>? detailInscription;
   final String opinion;
-  final String? id;
+  final int? id;
 
   Register copyWith({
     String? name,
@@ -51,16 +46,16 @@ class Register {
     String? university,
     String? dni,
     String? typeStudent,
-    String? hotmail,
-    String? cicle,
-    String? imgPerfil,
-    String? pagoCompr,
+    String? email,
+    String? ciclo,
+    String? imgperfil,
+    String? pagoComprob,
     String? constance,
     String? modality,
-    String? inscripction,
-    String? detailInscription,
+    String? inscription,
+    List<String>? detailInscription,
     String? opinion,
-    String? id,
+    int? id,
   }) =>
       Register(
           name: name ?? this.name,
@@ -68,13 +63,13 @@ class Register {
           university: university ?? this.university,
           dni: dni ?? this.dni,
           typeStudent: typeStudent ?? this.typeStudent,
-          hotmail: hotmail ?? this.hotmail,
-          cicle: cicle ?? this.cicle,
-          imgPerfil: imgPerfil ?? this.imgPerfil,
-          pagoCompr: pagoCompr ?? this.pagoCompr,
+          email: email ?? this.email,
+          ciclo: ciclo ?? this.ciclo,
+          imgperfil: imgperfil ?? this.imgperfil,
+          pagoComprob: pagoComprob ?? this.pagoComprob,
           constance: constance ?? this.constance,
           modality: modality ?? this.modality,
-          inscripction: inscripction ?? this.inscripction,
+          inscription: inscription ?? this.inscription,
           detailInscription: detailInscription ?? this.detailInscription,
           opinion: opinion ?? this.opinion,
           id: id ?? this.id);
@@ -84,15 +79,15 @@ class Register {
       lastname: json["lastname"],
       university: json["university"],
       dni: json["dni"],
-      typeStudent: json["type_student"],
-      hotmail: json["hotmail"],
-      cicle: json["cicle"],
-      imgPerfil: json["img_Perfil"],
-      pagoCompr: json["pago_Compr"],
+      typeStudent: json["typeStudent"],
+      email: json["email"],
+      ciclo: json["ciclo"],
+      imgperfil: json["imgperfil"],
+      pagoComprob: json["pagoComprob"],
       constance: json["constance"],
       modality: json["modality"],
-      inscripction: json["inscripction"],
-      detailInscription: json["detail_inscription"],
+      inscription: json["inscription"],
+      detailInscription: json["detailInscription"],
       opinion: json["opinion"],
       id: json['id']);
 
@@ -101,15 +96,15 @@ class Register {
         "lastname": lastname,
         "university": university,
         "dni": dni,
-        "type_student": typeStudent,
-        "hotmail": hotmail,
-        "cicle": cicle,
-        "img_Perfil": imgPerfil,
-        "pago_Compr": pagoCompr,
+        "typeStudent": typeStudent,
+        "email": email,
+        "ciclo": ciclo,
+        "imgperfil": imgperfil,
+        "pagoComprob": pagoComprob,
         "constance": constance,
         "modality": modality,
-        "inscripction": inscripction,
-        "detail_inscription": detailInscription,
+        "inscription": inscription,
+        "detailInscription": detailInscription,
         "opinion": opinion,
       };
 }

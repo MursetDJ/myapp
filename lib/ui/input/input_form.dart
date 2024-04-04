@@ -5,7 +5,10 @@ InputDecoration inputTextname(String name, Icon icons) {
       label: Row(
         children: [
           icons,
-          Text(name),
+          Text(
+            name,
+            style: const TextStyle(color: Colors.white),
+          ),
         ],
       ),
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)));

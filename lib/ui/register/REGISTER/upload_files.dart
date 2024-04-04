@@ -1,9 +1,23 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
-uploadFiles(String university, String filename, Uint8List file, String name,
-    String lastname, String type) async {
-  FirebaseStorage storage = FirebaseStorage.instance;
+uploadFiles(Uint8List file, String filename, String email, String type) async {
+  const String registerRef = 'http://127.0.0.1:8000/api/';
+  http.MultipartFile multipartFile =
+      http.MultipartFile.fromBytes('document', file, filename: filename);
+  try {
+    final request =
+        http.MultipartRequest('POST', Uri.parse("${registerRef}userdocument"));
+    request.files.add(multipartFile);
+    request.fields['email'] = email;
+    request.fields['pre'] = type;
+    await request.send();
+  } catch (e) {
+    return e;
+  }
+}
+/*
+FirebaseStorage storage = FirebaseStorage.instance;
   Reference ref =
       storage.ref(university).child("$name $lastname").child("$type $filename");
   try {
@@ -11,4 +25,4 @@ uploadFiles(String university, String filename, Uint8List file, String name,
   } on FirebaseException catch (e) {
     return e;
   }
-}
+ */

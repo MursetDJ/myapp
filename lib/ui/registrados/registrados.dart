@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/repository/register/register_repository.dart';
 import 'package:myapp/ui/menu/menu_app_bar.dart';
+import 'package:myapp/ui/register/REGISTER/register.dart';
 import 'package:myapp/ui/registrados/register_list.dart';
 import 'package:provider/provider.dart';
 
@@ -36,13 +37,15 @@ class __RegisterDetailsScreenStateState
   final ScrollController _scrollController = ScrollController();
   bool sort = true;
   int priority = 0;
+  int valor = -1;
+  String search = "";
   @override
   Widget build(BuildContext context) {
     final registers = context.watch<ListProvider>().searchRegister;
 
     return LayoutBuilder(builder: (context, espacio) {
       return Scaffold(
-        appBar: menuAppBar(espacio),
+        appBar: menuAppBar(espacio, context),
         body: registers == null
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -55,7 +58,13 @@ class __RegisterDetailsScreenStateState
                     padding: const EdgeInsets.all(20.0),
                     child: TextField(
                       onChanged: (value) {
-                        context.read<ListProvider>().searchRegistros(value);
+                        search = value;
+                        valor = universities.indexWhere(
+                            (element) => element.keys.first == false);
+                        context.read<ListProvider>().searchRegistros(
+                            value,
+                            valor >= 0 ? true : false,
+                            valor >= 0 ? universities[valor].values.first : "");
                       },
                       decoration: const InputDecoration(
                         label: Text(
@@ -95,26 +104,34 @@ class __RegisterDetailsScreenStateState
                                                   MaterialStatePropertyAll(
                                                       Colors.grey)),
                                       onPressed: () {
-                                        if (universities[index].keys.first) {
-                                          universities[index] = {
-                                            !universities[index].keys.first:
-                                                universities[index].values.first
+                                        valor = universities.indexWhere(
+                                            (element) =>
+                                                element.keys.first == false);
+                                        if (valor >= 0 && valor != index) {
+                                          universities[valor] = {
+                                            true:
+                                                universities[valor].values.first
                                           };
-                                          context
-                                              .read<ListProvider>()
-                                              .searchUniversityRegistros(
-                                                  universities[index]
-                                                      .values
-                                                      .first);
-                                        } else {
-                                          universities[index] = {
-                                            !universities[index].keys.first:
-                                                universities[index].values.first
-                                          };
-                                          context
-                                              .read<ListProvider>()
-                                              .searchUniversityRegistros("");
                                         }
+
+                                        universities[index] = {
+                                          !universities[index].keys.first:
+                                              universities[index].values.first
+                                        };
+                                        valor = universities.indexWhere(
+                                            (element) =>
+                                                element.keys.first == false);
+                                        context
+                                            .read<ListProvider>()
+                                            .searchRegistros(
+                                                search,
+                                                valor >= 0 ? true : false,
+                                                valor >= 0
+                                                    ? universities[valor]
+                                                        .values
+                                                        .first
+                                                    : "");
+                                        setState(() {});
                                       },
                                       child: Text(
                                         universities[index].values.first,
@@ -131,155 +148,201 @@ class __RegisterDetailsScreenStateState
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.all(20.0),
-                    child: SingleChildScrollView(
-                      child: DataTable(
-                        sortColumnIndex: priority,
-                        sortAscending: sort,
-                        columns: <DataColumn>[
-                          DataColumn(
-                            onSort: (columnIndex, ascending) {
-                              setState(() {
-                                priority = 0;
-                                sort = !sort;
-                                ascending = sort;
-                                registers
-                                    .sort((a, b) => a.name.compareTo(b.name));
-                                if (ascending) {
-                                  registers
-                                      .sort((a, b) => a.name.compareTo(b.name));
-                                } else {
-                                  registers
-                                      .sort((a, b) => b.name.compareTo(a.name));
-                                }
-                              });
-                            },
-                            label: const Expanded(
-                                child: Text(
-                              'Nombre',
-                              textAlign: TextAlign.center,
-                            )),
-                          ),
-                          DataColumn(
-                            onSort: (columnIndex, ascending) {
-                              setState(() {
-                                priority = 1;
-                                sort = !sort;
-                                ascending = sort;
-                                registers.sort(
-                                    (a, b) => a.lastname.compareTo(b.lastname));
-                                if (ascending) {
-                                  registers.sort((a, b) =>
-                                      a.lastname.compareTo(b.lastname));
-                                } else {
-                                  registers.sort((a, b) =>
-                                      b.lastname.compareTo(a.lastname));
-                                }
-                              });
-                            },
-                            label: const Expanded(
-                                child: Text(
-                              'Apellidos',
-                              textAlign: TextAlign.center,
-                            )),
-                          ),
-                          DataColumn(
-                            onSort: (columnIndex, ascending) {
-                              setState(() {
-                                priority = 2;
-                                sort = !sort;
-                                ascending = sort;
-                                registers
-                                    .sort((a, b) => a.dni.compareTo(b.dni));
-                                if (ascending) {
-                                  registers
-                                      .sort((a, b) => a.dni.compareTo(b.dni));
-                                } else {
-                                  registers
-                                      .sort((a, b) => b.dni.compareTo(a.dni));
-                                }
-                              });
-                            },
-                            label: const Expanded(
-                                child: Text(
-                              'DNI',
-                              textAlign: TextAlign.center,
-                            )),
-                          ),
-                          DataColumn(
-                            onSort: (columnIndex, ascending) {
-                              setState(() {
-                                priority = 3;
-                                sort = !sort;
-                                ascending = sort;
-                                registers.sort((a, b) =>
-                                    a.university.compareTo(b.university));
-                                if (ascending) {
-                                  registers.sort((a, b) =>
-                                      a.university.compareTo(b.university));
-                                } else {
-                                  registers.sort((a, b) =>
-                                      b.university.compareTo(a.university));
-                                }
-                              });
-                            },
-                            label: const Expanded(
-                              child: Text('Universidad',
-                                  textAlign: TextAlign.center),
-                            ),
-                          ),
-                          DataColumn(
-                            onSort: (columnIndex, ascending) {
-                              setState(() {
-                                priority = 3;
-                                sort = !sort;
-                                ascending = sort;
-                                registers.sort((a, b) =>
-                                    a.inscripction.compareTo(b.inscripction));
-                                if (ascending) {
-                                  registers.sort((a, b) =>
-                                      a.inscripction.compareTo(b.inscripction));
-                                } else {
-                                  registers.sort((a, b) =>
-                                      b.inscripction.compareTo(a.inscripction));
-                                }
-                              });
-                            },
-                            label: const Expanded(
-                              child: Text('Inscripciones',
-                                  textAlign: TextAlign.center),
-                            ),
-                          ),
-                          const DataColumn(
-                            label: Expanded(
-                              child:
-                                  Text('OPCIONES', textAlign: TextAlign.center),
-                            ),
-                          ),
-                          // Agrega más columnas según sea necesario
-                        ],
-                        rows: registers
-                            .map<DataRow>((element) => DataRow(
-                                  cells: <DataCell>[
-                                    DataCell(Text(element.name)),
-                                    DataCell(Text(element.lastname)),
-                                    DataCell(Text(element.dni)),
-                                    DataCell(Text(element.university)),
-                                    DataCell(Text(element.inscripction)),
-                                    DataCell(Row(
-                                      children: [
-                                        TextButton.icon(
-                                            onPressed: () {},
-                                            icon: const Icon(Icons.edit),
-                                            label: const Text("Editar"))
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      padding: const EdgeInsets.all(50.0),
+                      child: CustomScrollView(slivers: [
+                        SliverToBoxAdapter(
+                          child: DataTable(
+                            dataRowMinHeight: 20,
+                            dataRowMaxHeight: 100,
+                            sortColumnIndex: priority,
+                            sortAscending: sort,
+                            columns: <DataColumn>[
+                              DataColumn(
+                                onSort: (columnIndex, ascending) {
+                                  setState(() {
+                                    priority = 0;
+                                    sort = !sort;
+                                    ascending = sort;
+                                    registers.sort(
+                                        (a, b) => a.name.compareTo(b.name));
+                                    if (ascending) {
+                                      registers.sort(
+                                          (a, b) => a.name.compareTo(b.name));
+                                    } else {
+                                      registers.sort(
+                                          (a, b) => b.name.compareTo(a.name));
+                                    }
+                                  });
+                                },
+                                label: const Expanded(
+                                    child: Text(
+                                  'Nombre',
+                                  textAlign: TextAlign.center,
+                                )),
+                              ),
+                              DataColumn(
+                                onSort: (columnIndex, ascending) {
+                                  setState(() {
+                                    priority = 1;
+                                    sort = !sort;
+                                    ascending = sort;
+                                    registers.sort((a, b) =>
+                                        a.lastname.compareTo(b.lastname));
+                                    if (ascending) {
+                                      registers.sort((a, b) =>
+                                          a.lastname.compareTo(b.lastname));
+                                    } else {
+                                      registers.sort((a, b) =>
+                                          b.lastname.compareTo(a.lastname));
+                                    }
+                                  });
+                                },
+                                label: const Expanded(
+                                    child: Text(
+                                  'Apellidos',
+                                  textAlign: TextAlign.center,
+                                )),
+                              ),
+                              DataColumn(
+                                onSort: (columnIndex, ascending) {
+                                  setState(() {
+                                    priority = 2;
+                                    sort = !sort;
+                                    ascending = sort;
+                                    registers
+                                        .sort((a, b) => a.dni.compareTo(b.dni));
+                                    if (ascending) {
+                                      registers.sort(
+                                          (a, b) => a.dni.compareTo(b.dni));
+                                    } else {
+                                      registers.sort(
+                                          (a, b) => b.dni.compareTo(a.dni));
+                                    }
+                                  });
+                                },
+                                label: const Expanded(
+                                    child: Text(
+                                  'DNI',
+                                  textAlign: TextAlign.center,
+                                )),
+                              ),
+                              DataColumn(
+                                onSort: (columnIndex, ascending) {
+                                  setState(() {
+                                    priority = 3;
+                                    sort = !sort;
+                                    ascending = sort;
+                                    registers.sort((a, b) =>
+                                        a.university.compareTo(b.university));
+                                    if (ascending) {
+                                      registers.sort((a, b) =>
+                                          a.university.compareTo(b.university));
+                                    } else {
+                                      registers.sort((a, b) =>
+                                          b.university.compareTo(a.university));
+                                    }
+                                  });
+                                },
+                                label: const Expanded(
+                                  child: Text('Universidad',
+                                      textAlign: TextAlign.center),
+                                ),
+                              ),
+                              DataColumn(
+                                onSort: (columnIndex, ascending) {
+                                  setState(() {
+                                    priority = 4;
+                                    sort = !sort;
+                                    ascending = sort;
+                                    registers.sort((a, b) =>
+                                        a.inscription.compareTo(b.inscription));
+                                    if (ascending) {
+                                      registers.sort((a, b) => a.inscription
+                                          .compareTo(b.inscription));
+                                    } else {
+                                      registers.sort((a, b) => b.inscription
+                                          .compareTo(a.inscription));
+                                    }
+                                  });
+                                },
+                                label: const Expanded(
+                                  child: Text('Inscripciones',
+                                      textAlign: TextAlign.center),
+                                ),
+                              ),
+                              const DataColumn(
+                                label: Expanded(
+                                  child: Text('OPCIONES',
+                                      textAlign: TextAlign.center),
+                                ),
+                              ),
+                              // Agrega más columnas según sea necesario
+                            ],
+                            rows: registers
+                                .map<DataRow>((element) => DataRow(
+                                      cells: <DataCell>[
+                                        DataCell(Text(element.name)),
+                                        DataCell(Text(element.lastname)),
+                                        DataCell(Text(element.dni)),
+                                        DataCell(Text(element.university)),
+                                        DataCell(Text(element.inscription)),
+                                        DataCell(Row(
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.all(8),
+                                              child: IconButton(
+                                                tooltip: "EDITAR",
+                                                onPressed: () {
+                                                  Register registrados =
+                                                      registers
+                                                          .where((data) =>
+                                                              data.dni ==
+                                                              element.dni)
+                                                          .first;
+
+                                                  Navigator.pushNamed(
+                                                    context,
+                                                    '/listregister/edit',
+                                                    arguments: registrados,
+                                                  );
+                                                },
+                                                icon: const Icon(Icons.edit),
+                                                style: designIconButtonTable(
+                                                    Colors.white, Colors.blue),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.all(8),
+                                              child: IconButton(
+                                                tooltip: "VER",
+                                                onPressed: () {},
+                                                icon: const Icon(Icons
+                                                    .remove_red_eye_rounded),
+                                                style: designIconButtonTable(
+                                                    Colors.white, Colors.green),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.all(8),
+                                              child: IconButton(
+                                                tooltip: "ELIMINAR",
+                                                onPressed: () {},
+                                                icon: const Icon(Icons.delete),
+                                                style: designIconButtonTable(
+                                                    Colors.white, Colors.red),
+                                              ),
+                                            ),
+                                          ],
+                                        ))
                                       ],
                                     ))
-                                  ],
-                                ))
-                            .toList(),
-                      ),
+                                .toList(),
+                          ),
+                        ),
+                      ]),
                     ),
                   ),
                 ],
@@ -287,6 +350,13 @@ class __RegisterDetailsScreenStateState
       );
     });
   }
+}
+
+ButtonStyle designIconButtonTable(
+    Color iconColor, Color backgroundButtonColor) {
+  return ButtonStyle(
+      iconColor: MaterialStatePropertyAll(iconColor),
+      backgroundColor: MaterialStatePropertyAll(backgroundButtonColor));
 }
 /*ListView.builder(
                 padding: const EdgeInsets.all(18),

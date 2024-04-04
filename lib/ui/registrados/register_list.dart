@@ -14,6 +14,7 @@ class ListProvider extends ChangeNotifier {
   final Debouncer debouncer = Debouncer();
   Future<void> load() async {
     registros = await regRepo.getRegistro();
+
     _setinitialList();
     notifyListeners();
   }
@@ -22,9 +23,9 @@ class ListProvider extends ChangeNotifier {
     searchRegister = List<Register>.from(registros ?? []);
   }
 
-  void searchRegistros(String filter) async {
+  void searchRegistros(String filter, bool stateUniv, String univ) async {
     debouncer.excecute(() {
-      if (filter.isEmpty) {
+      if (filter.isEmpty && stateUniv == false) {
         _setinitialList();
       } else {
         searchRegister = List<Register>.from(
@@ -32,28 +33,20 @@ class ListProvider extends ChangeNotifier {
               element.name.toLowerCase().contains(filter.toLowerCase()) ||
               element.lastname.toLowerCase().contains(filter.toLowerCase()) ||
               element.university.toLowerCase().contains(filter.toLowerCase()) ||
-              element.cicle.toLowerCase().contains(filter.toLowerCase()) ||
-              element.hotmail.toLowerCase().contains(filter.toLowerCase()) ||
-              element.modality.toLowerCase().contains(filter.toLowerCase())),
+              element.ciclo.toLowerCase().contains(filter.toLowerCase()) ||
+              element.email.toLowerCase().contains(filter.toLowerCase()) ||
+              element.modality.toLowerCase().contains(filter.toLowerCase()) ||
+              element.dni.toLowerCase().contains(filter.toLowerCase())),
         );
+        if (stateUniv) {
+          searchRegister = List<Register>.from(
+            searchRegister!.where((element) =>
+                element.university.toLowerCase().contains(univ.toLowerCase())),
+          );
+        }
       }
       notifyListeners();
     });
-  }
-
-  void searchUniversityRegistros(String filter) async {
-    if (searchRegister == registros) {
-    } else {}
-
-    if (filter.isEmpty) {
-      _setinitialList();
-    } else {
-      searchRegister = List<Register>.from(
-        searchRegister!.where((element) =>
-            element.university.toLowerCase().contains(filter.toLowerCase())),
-      );
-    }
-    notifyListeners();
   }
 }
 
@@ -61,6 +54,6 @@ class Debouncer {
   Timer? timer;
   void excecute(VoidCallback action) {
     timer?.cancel();
-    timer = Timer(const Duration(seconds: 1), action);
+    timer = Timer(const Duration(milliseconds: 300), action);
   }
 }

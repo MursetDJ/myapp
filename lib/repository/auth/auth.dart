@@ -1,32 +1,34 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Auth {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  Future<bool> signInwithEmailAndPassword(String email, String password) async {
-    await _auth.signInWithEmailAndPassword(email: email, password: password);
-    if (FirebaseAuth.instance.currentUser!.emailVerified) {
-      return true;
-    } else {
-      await FirebaseAuth.instance.currentUser?.sendEmailVerification();
-      return false;
+  bool? sesion;
+
+  Future<String?> signInwithEmailAndPassword(
+      String email, String password) async {
+    final response = Dio();
+    const url = "http://127.0.0.1:8000/api";
+    try {
+      final bearer = await response.post("$url/sessionGet",
+          data: {"email": email, "password": password});
+      return bearer.data;
+    } catch (e) {
+      return null;
     }
   }
 
-  bool autenticate() {
-    if (FirebaseAuth.instance.currentUser!.emailVerified) {
-      return true;
-    } else {
-      FirebaseAuth.instance.currentUser?.sendEmailVerification();
-      return false;
-    }
+  cerrarsesion(BuildContext context) {
+    const FlutterSecureStorage().delete(key: "BearerTokken");
+    Navigator.of(context).pushNamedAndRemoveUntil("/login", (route) => false);
   }
 
-  bool inSession() {
-    if (FirebaseAuth.instance.currentUser != null &&
-        FirebaseAuth.instance.currentUser!.emailVerified) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  Future<bool> inSession() async =>
+      const FlutterSecureStorage().read(key: "BearerTokken").then((value) {
+        if (value != null) {
+          return true;
+        } else {
+          return false;
+        }
+      });
 }

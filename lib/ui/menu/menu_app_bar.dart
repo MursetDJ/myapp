@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/ui/buttonCard/button_style.dart';
 
-AppBar menuAppBar(BoxConstraints space) {
+AppBar menuAppBar(BoxConstraints space, BuildContext context) {
   return AppBar(
     backgroundColor: Colors.blue.shade800,
     title: const Text(
@@ -12,9 +12,18 @@ AppBar menuAppBar(BoxConstraints space) {
         ? [
             TextButton.icon(
                 style: designButton(),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/perfil');
+                },
                 icon: const Icon(Icons.account_circle_sharp),
                 label: const Text("PERFIL")),
+            TextButton.icon(
+                style: designButton(),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/menu');
+                },
+                icon: const Icon(Icons.menu_open),
+                label: const Text("MENÚ")),
             TextButton.icon(
                 style: designButton(),
                 onPressed: () {},

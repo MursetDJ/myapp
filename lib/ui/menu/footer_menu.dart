@@ -17,7 +17,6 @@ List<String> sponsors = [
 ];
 
 class _FooterMenuState extends State<FooterMenu> {
-  int cant = sponsors.length;
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -25,17 +24,16 @@ class _FooterMenuState extends State<FooterMenu> {
         for (var i = 0; i < sponsors.length; i++)
           Container(
             margin: const EdgeInsets.all(8),
-            height: 150,
-            width: 150,
+            height: 120,
+            width: 240,
             decoration: BoxDecoration(
+              color: Colors.blue.shade200,
               borderRadius: const BorderRadius.all(Radius.circular(45)),
               border: Border.all(width: 1, color: Colors.blue),
             ),
             child: Image.asset(
               "assets/${sponsors[i]}",
-              width: 60,
-              height: 120,
-              fit: BoxFit.contain,
+              fit: BoxFit.fill,
             ),
           ),
       ],

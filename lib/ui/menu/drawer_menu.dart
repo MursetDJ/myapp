@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/repository/auth/auth.dart';
 import 'package:myapp/ui/buttonCard/button_style.dart';
 
 class DrawerMenuWeb extends StatelessWidget {
@@ -65,6 +66,16 @@ class DrawerMenuWeb extends StatelessWidget {
                   onPressed: () {},
                   icon: const Icon(Icons.edit_calendar),
                   label: const Text("ASISTENCIA")),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                  style: designButton(),
+                  onPressed: () {
+                    Auth().cerrarsesion(context);
+                  },
+                  icon: const Icon(Icons.power_settings_new),
+                  label: const Text("CERRAR SESIÓN")),
             ),
           ],
         ));
