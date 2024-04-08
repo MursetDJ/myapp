@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:myapp/data/beneficios_firebase.dart';
 import 'package:myapp/data/conferencias_firebase.dart';
 import 'package:myapp/data/perfil_firebase.dart';
@@ -14,43 +13,45 @@ import 'package:myapp/repository/ponente/ponente_repository.dart';
 import 'package:myapp/repository/register/register_repository.dart';
 import 'package:myapp/repository/salidas/salidas_repository.dart';
 import 'package:myapp/test/carousel.dart';
-import 'package:myapp/ui/asistencias/asistencias_screen.dart';
-import 'package:myapp/ui/beneficios/backend/beneficios.dart';
-import 'package:myapp/ui/beneficios/ui/add/add_beneficio_screen.dart';
-import 'package:myapp/ui/beneficios/ui/beneficios_screen.dart';
-import 'package:myapp/ui/beneficios/ui/edit/edit_beneficios_screen.dart';
-import 'package:myapp/ui/beneficios/ui/manage_beneficios.dart';
-import 'package:myapp/ui/buttonCard/button_style.dart';
-import 'package:myapp/ui/manage_asistencias/add/add_manage_asistencias.dart';
-import 'package:myapp/ui/manage_asistencias/backend/conferencias.dart';
-import 'package:myapp/ui/manage_asistencias/edit/edit_manage_asistencias.dart';
-import 'package:myapp/ui/manage_asistencias/manage_asistencias_screen.dart';
-import 'package:myapp/ui/manage_ponentes/add/add_ponente_screen.dart';
-import 'package:myapp/ui/manage_ponentes/edit/edit_ponente_screen.dart';
-import 'package:myapp/ui/manage_ponentes/manage_ponentes_screen.dart';
-import 'package:myapp/ui/manage_salidas/add/add_salidas_screen.dart';
-import 'package:myapp/ui/manage_salidas/edit/edit_salidas_screen.dart';
-import 'package:myapp/ui/manage_salidas/manage_salidas_screen.dart';
-import 'package:myapp/ui/menu/app_menu.dart';
-import 'package:myapp/ui/menu/menu_screen.dart';
-import 'package:myapp/ui/perfil/ui/perfil_screen.dart';
-import 'package:myapp/ui/ponencias/ui/ponencias_screen.dart';
-import 'package:myapp/ui/ponente/backend/ponente.dart';
-import 'package:myapp/ui/ponente/ui/ponente_screen.dart';
-import 'package:myapp/ui/register/REGISTER/register.dart';
-import 'package:myapp/ui/register/register_screen.dart';
-import 'package:myapp/ui/registrados/options_register/edit_registrados.dart';
-import 'package:myapp/ui/salidas/backend/salidas.dart';
-import 'package:myapp/ui/salidas/salidas_dirigidas/salidas_dirigidas_screen.dart';
-import 'package:myapp/ui/users/user_screen.dart';
+import 'package:myapp/view/asistencias/asistencias_screen.dart';
+import 'package:myapp/view/beneficios/backend/beneficios.dart';
+import 'package:myapp/view/beneficios/ui/add/add_beneficio_screen.dart';
+import 'package:myapp/view/beneficios/ui/beneficios_screen.dart';
+import 'package:myapp/view/beneficios/ui/edit/edit_beneficios_screen.dart';
+import 'package:myapp/view/beneficios/ui/manage_beneficios.dart';
+import 'package:myapp/view/buttonCard/button_style.dart';
+import 'package:myapp/view/manage_asistencias/add/add_manage_asistencias.dart';
+import 'package:myapp/view/manage_asistencias/backend/conferencias.dart';
+import 'package:myapp/view/manage_asistencias/edit/edit_manage_asistencias.dart';
+import 'package:myapp/view/manage_asistencias/manage_asistencias_screen.dart';
+import 'package:myapp/view/manage_ponentes/add/add_ponente_screen.dart';
+import 'package:myapp/view/manage_ponentes/edit/edit_ponente_screen.dart';
+import 'package:myapp/view/manage_ponentes/manage_ponentes_screen.dart';
+import 'package:myapp/view/manage_salidas/add/add_salidas_screen.dart';
+import 'package:myapp/view/manage_salidas/edit/edit_salidas_screen.dart';
+import 'package:myapp/view/manage_salidas/manage_salidas_screen.dart';
+import 'package:myapp/view/menu/app_menu.dart';
+import 'package:myapp/view/menu/menu_screen.dart';
+import 'package:myapp/view/perfil/ui/perfil_screen.dart';
+import 'package:myapp/view/ponencias/ui/ponencias_screen.dart';
+import 'package:myapp/view/ponente/backend/ponente.dart';
+import 'package:myapp/view/ponente/ui/ponente_screen.dart';
+import 'package:myapp/view/register/REGISTER/register.dart';
+import 'package:myapp/view/register/register_screen.dart';
+import 'package:myapp/view/registrados/options_register/edit_registrados.dart';
+import 'package:myapp/view/salidas/backend/salidas.dart';
+import 'package:myapp/view/salidas/salidas_dirigidas/salidas_dirigidas_screen.dart';
+import 'package:myapp/view/users/user_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'ui/registrados/registrados.dart';
+import 'view/registrados/registrados.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final storage = await const FlutterSecureStorage().read(key: "BearerTokken");
-  final initialRoute = storage != null ? '/menu' : '/login';
+  final shared = await SharedPreferences.getInstance();
+  final storages = shared.getString("BearerTokken");
+  final initialRoute = storages != null ? '/menu' : '/login';
   runApp(MyApp(initialRoute: initialRoute));
 }
 
@@ -144,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!_navigated && await Auth().inSession()) {
+      if (!_navigated && await Auth().inSession() != null) {
         _navigated = true;
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/menu', (route) => false);

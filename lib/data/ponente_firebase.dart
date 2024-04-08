@@ -1,16 +1,26 @@
 import 'package:dio/dio.dart';
 import 'package:myapp/repository/ponente/ponente_repository.dart';
-import 'package:myapp/ui/ponente/backend/ponente.dart';
+import 'package:myapp/view/ponente/backend/ponente.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PonenteFirefase implements PonenteRepository {
+  final shared = SharedPreferences.getInstance();
   final dio = Dio();
   final String poenenteRef = 'http://127.0.0.1:8000/api/';
 
   @override
   Future<bool> addPonentes(Ponentes ponente) async {
     try {
-      final result =
-          await dio.post("${poenenteRef}addPonentes", data: ponente.toJson());
+      final bearerToken = await shared;
+      final result = await dio.post(
+        "${poenenteRef}addPonentes",
+        data: ponente.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
+      );
       bool response = result.data;
       return response;
     } catch (e) {
@@ -21,8 +31,14 @@ class PonenteFirefase implements PonenteRepository {
   @override
   Future<List<Ponentes>> getPonentes() async {
     try {
+      final bearerToken = await shared;
       final result = await dio.post(
         "${poenenteRef}getPonentes",
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
       );
       final List<dynamic> data = result.data;
       final List<Ponentes> ponenteList =
@@ -36,8 +52,16 @@ class PonenteFirefase implements PonenteRepository {
   @override
   Future<bool> editPonente(Ponentes ponente) async {
     try {
-      final result =
-          await dio.post("${poenenteRef}editPonentes", data: ponente.toJson());
+      final bearerToken = await shared;
+      final result = await dio.post(
+        "${poenenteRef}editPonentes",
+        data: ponente.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
+      );
       bool response = result.data;
 
       return response;
@@ -49,7 +73,14 @@ class PonenteFirefase implements PonenteRepository {
   @override
   Future<bool> deletePonente(Ponentes ponente) async {
     try {
+      final bearerToken = await shared;
       final result = await dio.post("${poenenteRef}deletePonentes",
+          options: Options(
+            headers: {
+              'Authorization':
+                  'Bearer ${bearerToken.getString('BearerTokken')}',
+            },
+          ),
           data: ponente.toJson());
       bool response = result.data;
 

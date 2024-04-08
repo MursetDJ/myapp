@@ -1,4 +1,4 @@
-import 'package:myapp/ui/beneficios/backend/beneficios.dart';
+import 'package:myapp/view/beneficios/backend/beneficios.dart';
 
 abstract class BeneficiosRepository {
   Future<List<Beneficios>> getBeneficios();

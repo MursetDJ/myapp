@@ -1,15 +1,25 @@
 import 'package:dio/dio.dart';
 import 'package:myapp/repository/beneficios/beneficios_repository.dart';
-import 'package:myapp/ui/beneficios/backend/beneficios.dart';
+import 'package:myapp/view/beneficios/backend/beneficios.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BeneficiosFirebase implements BeneficiosRepository {
+  final shared = SharedPreferences.getInstance();
   final dio = Dio();
   final String poenenteRef = 'http://127.0.0.1:8000/api/';
   @override
   Future<bool> addBeneficio(Beneficios beneficio) async {
     try {
-      final result = await dio.post("${poenenteRef}addBeneficios",
-          data: beneficio.toJson());
+      final bearerToken = await shared;
+      final result = await dio.post(
+        "${poenenteRef}addBeneficios",
+        data: beneficio.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
+      );
       bool response = result.data;
 
       return response;
@@ -21,9 +31,16 @@ class BeneficiosFirebase implements BeneficiosRepository {
   @override
   Future<bool> deleteBeneficio(Beneficios beneficio) async {
     try {
-      print(beneficio.toJson());
-      final result = await dio.post("${poenenteRef}deleteBeneficios",
-          data: beneficio.toJson());
+      final bearerToken = await shared;
+      final result = await dio.post(
+        "${poenenteRef}deleteBeneficios",
+        data: beneficio.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
+      );
       bool response = result.data;
 
       return response;
@@ -35,8 +52,16 @@ class BeneficiosFirebase implements BeneficiosRepository {
   @override
   Future<bool> editBeneficio(Beneficios beneficio) async {
     try {
-      final result = await dio.post("${poenenteRef}editBeneficios",
-          data: beneficio.toJson());
+      final bearerToken = await shared;
+      final result = await dio.post(
+        "${poenenteRef}editBeneficios",
+        data: beneficio.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
+      );
       bool response = result.data;
 
       return response;
@@ -48,8 +73,14 @@ class BeneficiosFirebase implements BeneficiosRepository {
   @override
   Future<List<Beneficios>> getBeneficios() async {
     try {
+      final bearerToken = await shared;
       final result = await dio.post(
         "${poenenteRef}getBeneficios",
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
       );
 
       final List<dynamic> data = result.data;

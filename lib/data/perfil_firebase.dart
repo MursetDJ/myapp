@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:myapp/repository/perfil/perfil_repository.dart';
-import 'package:myapp/ui/perfil/backend/perfil.dart';
+import 'package:myapp/view/perfil/backend/perfil.dart';
 
 class PerfilFirebase implements PerfilReposiroty {
   final dio = Dio();

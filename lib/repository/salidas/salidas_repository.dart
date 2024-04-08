@@ -1,4 +1,4 @@
-import 'package:myapp/ui/salidas/backend/salidas.dart';
+import 'package:myapp/view/salidas/backend/salidas.dart';
 
 abstract class SalidaRepository {
   Future<List<Salidas>> getSalidas(String? tipo);

@@ -1,4 +1,4 @@
-import 'package:myapp/ui/manage_asistencias/backend/conferencias.dart';
+import 'package:myapp/view/manage_asistencias/backend/conferencias.dart';
 
 abstract class ConferenciaRepository {
   Future<List<Conferencia>> getConferencias();

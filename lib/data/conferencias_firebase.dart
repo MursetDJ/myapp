@@ -1,16 +1,26 @@
 import 'package:dio/dio.dart';
 import 'package:myapp/repository/conferencia/conferencia_repository.dart';
-import 'package:myapp/ui/manage_asistencias/backend/conferencias.dart';
+import 'package:myapp/view/manage_asistencias/backend/conferencias.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConferenciaFirefase implements ConferenciaRepository {
+  final shared = SharedPreferences.getInstance();
   final dio = Dio();
   final String poenenteRef = 'http://127.0.0.1:8000/api/';
 
   @override
   Future<bool> addConferencias(Conferencia conferencia) async {
     try {
-      final result = await dio.post("${poenenteRef}addConferencias",
-          data: conferencia.toJson());
+      final bearerToken = await shared;
+      final result = await dio.post(
+        "${poenenteRef}addConferencias",
+        data: conferencia.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
+      );
       bool response = result.data;
       return response;
     } catch (e) {
@@ -21,8 +31,14 @@ class ConferenciaFirefase implements ConferenciaRepository {
   @override
   Future<List<Conferencia>> getConferencias() async {
     try {
+      final bearerToken = await shared;
       final result = await dio.post(
         "${poenenteRef}getConferencias",
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${bearerToken.getString('BearerTokken')}',
+          },
+        ),
       );
 
       final List<dynamic> data = result.data;
@@ -37,7 +53,14 @@ class ConferenciaFirefase implements ConferenciaRepository {
   @override
   Future<bool> editConferencia(Conferencia conferencia) async {
     try {
+      final bearerToken = await shared;
       final result = await dio.post("${poenenteRef}editConferencias",
+          options: Options(
+            headers: {
+              'Authorization':
+                  'Bearer ${bearerToken.getString('BearerTokken')}',
+            },
+          ),
           data: conferencia.toJson());
       bool response = result.data;
 
@@ -50,7 +73,14 @@ class ConferenciaFirefase implements ConferenciaRepository {
   @override
   Future<bool> deleteConferencia(Conferencia conferencia) async {
     try {
+      final bearerToken = await shared;
       final result = await dio.post("${poenenteRef}deleteConferencias",
+          options: Options(
+            headers: {
+              'Authorization':
+                  'Bearer ${bearerToken.getString('BearerTokken')}',
+            },
+          ),
           data: conferencia.toJson());
       bool response = result.data;
 

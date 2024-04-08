@@ -1,4 +1,4 @@
-import 'package:myapp/ui/ponente/backend/ponente.dart';
+import 'package:myapp/view/ponente/backend/ponente.dart';
 
 abstract class PonenteRepository {
   Future<List<Ponentes>> getPonentes();

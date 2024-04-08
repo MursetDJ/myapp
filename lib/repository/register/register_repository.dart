@@ -1,4 +1,4 @@
-import 'package:myapp/ui/register/REGISTER/register.dart';
+import 'package:myapp/view/register/REGISTER/register.dart';
 
 abstract class RegisterRepository {
   Future<List<Register>> getRegistro();
